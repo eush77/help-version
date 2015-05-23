@@ -6,6 +6,15 @@ var callsites = require('callsites'),
 var path = require('path');
 
 
+// Add newline if necessary.
+var write = function (data) {
+  if (data.slice(-1) != '\n') {
+    data += '\n';
+  }
+  process.stdout.write(data);
+};
+
+
 var getVersion = function (caller) {
   var pkgPath = path.join(findRoot(caller), 'package.json');
   return require(pkgPath).version;
@@ -21,11 +30,11 @@ module.exports = function (help, version) {
   var argv = process.argv.slice(2);
 
   if (argv == '--help') {
-    console.log(help);
+    write(help);
     process.exit();
   }
   if (argv == '--version') {
-    console.log(version);
+    write(version);
     process.exit();
   }
 
