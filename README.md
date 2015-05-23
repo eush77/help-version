@@ -22,7 +22,7 @@ function usage() {
   return 'Usage:  my-app [file]';
 }
 
-helpVersion.version
+helpVersion.version()
 //=> "v0.1.0"
 
 console.log('main thing');
@@ -41,13 +41,21 @@ main thing
 
 ## API
 
-### `helpVersion(help, [version])`
+### `helpVersion = require('help-version')(help, [version])`
 
 Checks `process.argv` for `--help` or `--version`, prints `help` or `version` if found one.
 
 `version` defaults to `version` field from your local `package.json`.
 
-Returns an object `{ help: help, version: version }`.
+### `helpVersion.help([code], [stream])`
+
+With no arguments, returns the `help` string.
+
+With one or two arguments, writes `help` to the `stream` and exits with `code`. `stream` defaults to `process.stdout` if `code==0` and `process.stderr` otherwise.
+
+### `helpVersion.version([code], [stream])`
+
+Returns `version` string or writes it to `stream` and exits.
 
 ## Install
 

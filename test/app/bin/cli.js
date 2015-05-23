@@ -12,5 +12,5 @@ var minimist = require('minimist');
   }
   console.log((opts.adj || 'Main') + ' output.');
   console.log();
-  console.log(helpVersion.version, helpVersion.help);
+  console.log(helpVersion.version(), helpVersion.help());
 }(minimist(process.argv.slice(2))));

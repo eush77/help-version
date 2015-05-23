@@ -7,11 +7,25 @@ var path = require('path');
 
 
 // Add newline if necessary.
-var write = function (data) {
+var write = function (data, stream) {
   if (data.slice(-1) != '\n') {
     data += '\n';
   }
-  process.stdout.write(data);
+  (stream || process.stdout).write(data);
+};
+
+
+var maybeExit = function (data) {
+  return function (code, stream) {
+    if (code == null) {
+      return data;
+    }
+    if (stream == null) {
+      stream = !code ? process.stdout : process.stderr;
+    }
+    write(data, stream);
+    process.exit(code);
+  };
 };
 
 
@@ -39,7 +53,7 @@ module.exports = function (help, version) {
   }
 
   return {
-    help: help,
-    version: version
+    help: maybeExit(help),
+    version: maybeExit(version)
   };
 };
