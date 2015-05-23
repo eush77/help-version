@@ -11,4 +11,6 @@ var minimist = require('minimist');
     process.stdout.write('[' + opts.prefix + '] ');
   }
   console.log((opts.adj || 'Main') + ' output.');
+  console.log();
+  console.log(helpVersion.version, helpVersion.help);
 }(minimist(process.argv.slice(2))));

@@ -15,7 +15,7 @@ var getVersion = function (caller) {
 module.exports = function (help, version) {
   if (version == null) {
     var caller = callsites()[1].getFileName();
-    version = getVersion(caller);
+    version = 'v' + getVersion(caller);
   }
 
   var argv = process.argv.slice(2);
@@ -25,7 +25,12 @@ module.exports = function (help, version) {
     process.exit();
   }
   if (argv == '--version') {
-    console.log('v' + version);
+    console.log(version);
     process.exit();
   }
+
+  return {
+    help: help,
+    version: version
+  };
 };
