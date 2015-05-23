@@ -7,7 +7,7 @@ var spawn = require('child_process').spawn;
 
 module.exports = function (filename, argv, cb) {
   var app = spawn('node', [filename].concat(argv),
-                  { stdio: ['ignore', 'pipe', 'inherit'] });
+                  { stdio: ['ignore', 'pipe', process.stderr] });
   app.on('exit', function (code, signal) {
     code |= !!signal;
     if (code) {
