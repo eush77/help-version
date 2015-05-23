@@ -11,7 +11,7 @@ var getOutput = function (/* [argv] */ cb) {
   var argv = [].slice.call(arguments);
   cb = argv.pop();
 
-  var app = spawn('node', [path.join(__dirname, 'app/cli.js')].concat(argv),
+  var app = spawn('node', [path.join(__dirname, 'app/bin/cli.js')].concat(argv),
                   { stdio: ['ignore', 'pipe', 'inherit'] });
   app.on('exit', function (code, signal) {
     code |= !!signal;

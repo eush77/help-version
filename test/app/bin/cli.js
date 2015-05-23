@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var helpVersion = require('../..')('Usage information.');
+var helpVersion = require('../../..')('Usage information.');
 
 var minimist = require('minimist');
 
