@@ -19,24 +19,32 @@ Automatic handling of `--help` and `--version` arguments for CLI applications.
 var helpVersion = require('help-version')(usage());
 
 function usage() {
-  return 'Usage:  my-app [file]';
+  // Makes use of function declarations hoisting.
+  return 'Usage:  my-cat [file]';
 }
 
 helpVersion.version()
 //=> "v0.1.0"
 
-console.log('main thing');
+if (process.argv.length != 3) {
+  // Shows help and exits with code 1.
+  helpVersion.help(1);
+}
+
+// Main thing.
+fs.createReadStream(process.argv[2])
+  .pipe(process.stdout);
 ```
 
 Catches `--help` and `--version` automatically.
 
 ```
-$ ./app.js --help
-Usage:  my-app [file]
-$ ./app.js --version
+$ ./cat.js --help
+Usage:  my-cat [file]
+$ ./cat.js --version
 v0.1.0
-$ ./app.js
-main thing
+$ ./cat.js file.txt
+contents of file.txt
 ```
 
 ## API
