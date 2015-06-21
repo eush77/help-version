@@ -49,21 +49,21 @@ contents of file.txt
 
 ## API
 
-### `helpVersion = require('help-version')(help, [version])`
+### `helpVersion = require('help-version')(helpText)`
 
-Checks `process.argv` for `--help` or `--version`, prints `help` or `version` if found one.
+Checks `process.argv` for `--help` or `--version`, prints `helpText` or app version if found one.
 
-`version` defaults to `version` field from your local `package.json`.
+App version is determined from the `version` field from your local `package.json`.
 
 ### `helpVersion.help([code], [stream])`
 
-With no arguments, returns the `help` string.
+With no arguments, returns the help string.
 
-With one or two arguments, writes `help` to the `stream` and exits with `code`. `stream` defaults to `process.stdout` if `code==0` and `process.stderr` otherwise.
+With one or two arguments, writes it to the `stream` instead and exits with `code`. `stream` defaults to `process.stdout` if `code==0` and `process.stderr` otherwise.
 
 ### `helpVersion.version([code], [stream])`
 
-Returns `version` string or writes it to `stream` and exits.
+Returns the version string or writes it to `stream` and exits.
 
 ## Install
 

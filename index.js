@@ -35,11 +35,9 @@ var getVersion = function (caller) {
 };
 
 
-module.exports = function (help, version) {
-  if (version == null) {
-    var caller = callsites()[1].getFileName();
-    version = 'v' + getVersion(caller);
-  }
+module.exports = function (help) {
+  var caller = callsites()[1].getFileName();
+  var version = 'v' + getVersion(caller);
 
   var argv = process.argv.slice(2);
 
