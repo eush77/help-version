@@ -6,12 +6,18 @@ var callsites = require('callsites'),
 var path = require('path');
 
 
+var getVersion = function (caller) {
+  var pkgPath = path.join(findRoot(caller), 'package.json');
+  return require(pkgPath).version;
+};
+
+
 // Add newline if necessary.
 var write = function (data, stream) {
   if (data.slice(-1) != '\n') {
     data += '\n';
   }
-  (stream || process.stdout).write(data);
+  (stream || this.stdout).write(data);
 };
 
 
@@ -21,37 +27,40 @@ var maybeExit = function (data) {
       return data;
     }
     if (stream == null) {
-      stream = !code ? process.stdout : process.stderr;
+      stream = !code ? this.stdout : this.stderr;
     }
-    write(data, stream);
-    process.exit(code);
+    write.call(this, data, stream);
+    this.exit(code);
+  }.bind(this);
+};
+
+
+module.exports = function (help, opts) {
+  opts = opts || {};
+
+  // Copy to a separate object to accomodate for passing `process` object with
+  // getters.
+  var options = {
+    argv: opts.argv || process.argv.slice(2),
+    exit: opts.exit || process.exit,
+    stdout: opts.stdout || process.stdout,
+    stderr: opts.stderr || process.stderr
   };
-};
 
-
-var getVersion = function (caller) {
-  var pkgPath = path.join(findRoot(caller), 'package.json');
-  return require(pkgPath).version;
-};
-
-
-module.exports = function (help) {
   var caller = callsites()[1].getFileName();
   var version = 'v' + getVersion(caller);
 
-  var argv = process.argv.slice(2);
-
-  if (argv == '--help') {
-    write(help);
-    process.exit();
+  if (options.argv == '--help') {
+    write.call(options, help);
+    options.exit();
   }
-  if (argv == '--version') {
-    write(version);
-    process.exit();
+  if (options.argv == '--version') {
+    write.call(options, version);
+    options.exit();
   }
 
   return {
-    help: maybeExit(help),
-    version: maybeExit(version)
+    help: maybeExit.call(options, help),
+    version: maybeExit.call(options, version)
   };
 };
