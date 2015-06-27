@@ -1,3 +1,3 @@
 'use strict';
 
-require('../..')('newline\n', 'newline\n');
+require('../..')('newline\n');

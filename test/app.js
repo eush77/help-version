@@ -1,6 +1,6 @@
 'use strict';
 
-var getOutput = require('./lib/get_output');
+var getOutput = require('./lib/get-output');
 
 var test = require('tape');
 
