@@ -49,17 +49,24 @@ contents of file.txt
 
 ## API
 
-### `helpVersion = require('help-version')(helpText)`
+### `helpVersion = require('help-version')(helpText, [opts])`
 
 Checks `process.argv` for `--help` or `--version`, prints `helpText` or app version if found one.
 
 App version is determined from the `version` field from your local `package.json`.
 
+| Option   | Default                 |
+| :------: | :---------------------: |
+| `argv`   | `process.argv.slice(2)` |
+| `exit`   | `process.exit`          |
+| `stdout` | `process.stdout`        |
+| `stderr` | `process.stderr`        |
+
 ### `helpVersion.help([code], [stream])`
 
 With no arguments, returns the help string.
 
-With one or two arguments, writes it to the `stream` instead and exits with `code`. `stream` defaults to `process.stdout` if `code==0` and `process.stderr` otherwise.
+With one or two arguments, writes it to the `stream` instead and exits with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
 
 ### `helpVersion.version([code], [stream])`
 
