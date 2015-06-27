@@ -3,7 +3,9 @@
 var getHelpVersion = require('..'),
     getOutput = require('./lib/get-output');
 
-var test = require('tape');
+var test = require('tape'),
+    concat = require('concat-stream'),
+    through = require('through2');
 
 var path = require('path');
 
@@ -40,4 +42,29 @@ test('help, with newline', function (t) {
     t.equal(output, 'newline\n');
     t.end();
   });
+});
+
+
+test('options', function (t) {
+  var opts = {
+    argv: ['there', 'is', 'some', '--help', 'in', 'argv'],
+    exit: function exit(code) { exit.code = code || 0 },
+    stdout: through(),
+    stderr: through()
+  };
+
+  getHelpVersion('usage', opts);
+  opts.stdout.end();
+  opts.stderr.end();
+
+  t.plan(3);
+  t.equal(opts.exit.code, 0);
+
+  opts.stdout.pipe(concat({ encoding: 'string' }, function (output) {
+    t.equal(output, 'usage\n');
+  }));
+
+  opts.stderr.pipe(concat({ encoding: 'string' }, function (output) {
+    t.equal(output, '');
+  }));
 });
