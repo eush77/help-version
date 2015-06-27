@@ -25,7 +25,10 @@
     "help",
     "version",
     "argument",
-    "usage"
+    "usage",
+    "options",
+    "application",
+    "program"
   ],
   "dependencies": {
     "callsites": "^1.0.0",
