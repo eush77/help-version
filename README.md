@@ -51,26 +51,32 @@ contents of file.txt
 
 ### `helpVersion = require('help-version')(helpText, [opts])`
 
-Checks `process.argv` for `--help` or `--version`, prints `helpText` or app version if found one.
+Checks `opts.argv` for `--help` or `--version`.
 
-App version is determined from the `version` field from your local `package.json`.
+1. If `--help` is found, prints `helpText` to `opts.stdout` and calls `opts.exit`.
 
-| Option   | Default                 |
-| :------: | :---------------------: |
-| `argv`   | `process.argv.slice(2)` |
-| `exit`   | `process.exit`          |
-| `stdout` | `process.stdout`        |
-| `stderr` | `process.stderr`        |
+2. If `--version` is found, prints app version (determined from the `version` field from your local `package.json`) to `opts.stdout` and calls `opts.exit`.
+
+Returns object with two (bound) methods: `helpVersion.help([code], [stream])` and `helpVersion.version([code], [stream])`.
+
+| Option         | Default                 |
+| :------------: | :---------------------: |
+| `argv`         | `process.argv.slice(2)` |
+| `exit([code])` | `process.exit`          |
+| `stdout`       | `process.stdout`        |
+| `stderr`       | `process.stderr`        |
 
 ### `helpVersion.help([code], [stream])`
 
 With no arguments, returns the help string.
 
-With one or two arguments, writes it to the `stream` instead and exits with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
+With one or two arguments, writes it to the `stream` instead and exits (via `opts.exit`) with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
 
 ### `helpVersion.version([code], [stream])`
 
-Returns the version string or writes it to `stream` and exits.
+With no arguments, returns the version string.
+
+With one or two arguments, writes it to the `stream` instead and exits (via `opts.exit`) with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
 
 ## Install
 
