@@ -4,7 +4,6 @@ var getHelpVersion = require('..'),
     getOutput = require('./lib/get-output');
 
 var test = require('tape'),
-    concat = require('concat-stream'),
     through = require('through2');
 
 var path = require('path');
@@ -53,18 +52,23 @@ test('options', function (t) {
     stderr: through()
   };
 
-  getHelpVersion('usage', opts);
-  opts.stdout.end();
-  opts.stderr.end();
+  t.plan(6);
 
-  t.plan(3);
+  opts.stdout.once('data', function (output) {
+    t.equal(output.toString(), 'usage\n');
+  });
+  var helpVersion = getHelpVersion('usage', opts);
   t.equal(opts.exit.code, 0);
 
-  opts.stdout.pipe(concat({ encoding: 'string' }, function (output) {
-    t.equal(output, 'usage\n');
-  }));
+  opts.stderr.once('data', function (output) {
+    t.equal(output.toString(), 'usage\n');
+  });
+  helpVersion.help(1);
+  t.equal(opts.exit.code, 1);
 
-  opts.stderr.pipe(concat({ encoding: 'string' }, function (output) {
-    t.equal(output, '');
-  }));
+  opts.stderr.once('data', function (output) {
+    t.equal(output.toString(), 'v' + require('../package').version + '\n');
+  });
+  helpVersion.version(2);
+  t.equal(opts.exit.code, 2);
 });
