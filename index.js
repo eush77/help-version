@@ -1,15 +1,9 @@
 'use strict';
 
-var callsites = require('callsites'),
-    findRoot = require('find-root');
+var getVersion = require('./lib/get-version'),
+    findOption = require('./lib/find-option');
 
-var path = require('path');
-
-
-var getVersion = function (caller) {
-  var pkgPath = path.join(findRoot(caller), 'package.json');
-  return require(pkgPath).version;
-};
+var callsites = require('callsites');
 
 
 // Add newline if necessary.
@@ -50,13 +44,16 @@ module.exports = function (help, opts) {
   var caller = callsites()[1].getFileName();
   var version = 'v' + getVersion(caller);
 
-  if (options.argv == '--help') {
-    write.call(options, help);
-    options.exit();
-  }
-  if (options.argv == '--version') {
-    write.call(options, version);
-    options.exit();
+  switch (findOption(options.argv, ['--help', '--version'])) {
+    case '--help':
+      write.call(options, help);
+      options.exit();
+      break;
+
+    case '--version':
+      write.call(options, version);
+      options.exit();
+      break;
   }
 
   return {

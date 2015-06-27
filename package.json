@@ -8,7 +8,8 @@
     "test": "tape test/*.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "lib/"
   ],
   "homepage": "https://github.com/eush77/help-version",
   "repository": {
