@@ -21,14 +21,21 @@
   },
   "keywords": [
     "cli",
+    "bin",
     "argv",
+    "opts",
     "help",
     "version",
     "argument",
+    "arguments",
     "usage",
+    "option",
     "options",
+    "flag",
+    "flags",
     "application",
-    "program"
+    "program",
+    "testable"
   ],
   "dependencies": {
     "callsites": "^1.0.0",
