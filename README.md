@@ -4,7 +4,13 @@
 
 [![Build Status][travis-badge]][travis] [![Dependency Status][david-badge]][david]
 
-Automatic handling of `--help` and `--version` arguments for CLI applications.
+Anything you wanted to do with `--help` and `--version`:
+
+- checks these arguments in `process.argv`, so you don't have to;
+- extracts `version` from your `package.json` file;
+- returns functions that give you both `--help` and `--version`, in case you need to handle them differently;
+- returns the function that prints `--help` and exits with the given1 code;
+- highly configurable: you can set `process.argv`, `stdout` and `stderr` streams, and even `process.exit` function — you can use it for testing.
 
 [travis]: https://travis-ci.org/eush77/help-version
 [travis-badge]: https://travis-ci.org/eush77/help-version.svg
@@ -16,22 +22,19 @@ Automatic handling of `--help` and `--version` arguments for CLI applications.
 ```js
 #!/usr/bin/env node
 
-var helpVersion = require('help-version')(usage());
+var Cli = require('help-version');
 
-function usage() {
-  // Makes use of function declarations hoisting.
-  return 'Usage:  my-cat [file]';
-}
 
-helpVersion.version()
+var cli = Cli('Usage:  my-cat [file]');
+
+cli.version()
 //=> "v0.1.0"
 
 if (process.argv.length != 3) {
-  // Shows help and exits with code 1.
-  helpVersion.help(1);
+  // Show help and exit with code 1.
+  cli.help(1);
 }
 
-// Main thing.
 fs.createReadStream(process.argv[2])
   .pipe(process.stdout);
 ```
@@ -49,7 +52,9 @@ contents of file.txt
 
 ## API
 
-### `helpVersion = require('help-version')(helpText, [opts])`
+### `cli = Cli(helpText, [opts])`
+
+- `helpText` {String} — help text to print on `--help`.
 
 Checks `opts.argv` for `--help` or `--version`.
 
@@ -57,7 +62,7 @@ Checks `opts.argv` for `--help` or `--version`.
 
 2. If `--version` is found, prints app version (determined from the `version` field from your local `package.json`) to `opts.stdout` and calls `opts.exit`.
 
-Returns object with two (bound) methods: `helpVersion.help([code], [stream])` and `helpVersion.version([code], [stream])`.
+Returns object with two (bound) methods: `cli.help([code], [stream])` and `cli.version([code], [stream])`.
 
 | Option         | Default                 |
 | :------------: | :---------------------: |
@@ -66,13 +71,13 @@ Returns object with two (bound) methods: `helpVersion.help([code], [stream])` an
 | `stdout`       | `process.stdout`        |
 | `stderr`       | `process.stderr`        |
 
-### `helpVersion.help([code], [stream])`
+### `cli.help([code], [stream])`
 
 With no arguments, returns the help string.
 
-With one or two arguments, writes it to the `stream` instead and exits (via `opts.exit`) with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
+With one or two arguments, writes it to `stream` instead and exits (via `opts.exit`) with `code`. `stream` defaults to `opts.stdout` if `code==0` and `opts.stderr` otherwise.
 
-### `helpVersion.version([code], [stream])`
+### `cli.version([code], [stream])`
 
 With no arguments, returns the version string.
 

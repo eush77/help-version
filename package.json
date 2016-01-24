@@ -1,7 +1,7 @@
 {
   "name": "help-version",
   "version": "1.0.0",
-  "description": "Easily handle --help and --version arguments in your CLI application",
+  "description": "Handle --help and --version arguments in your CLI application",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
   "scripts": {
