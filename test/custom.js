@@ -45,7 +45,16 @@ test('help, with newline', function (t) {
 
 
 test('help, as a function', function (t) {
-  t.equal(getHelpVersion(function () { return 'foo' }).help(), 'foo');
+  var timesCalled = 0;
+  var helpFn = function () {
+    timesCalled += 1;
+    return 'foo';
+  };
+  var hv = getHelpVersion(helpFn);
+
+  t.equal(hv.help(), 'foo');
+  t.equal(hv.help(), 'foo');
+  t.equal(timesCalled, 1);
 
   output('function', ['--help'], function (output) {
     t.equal(output, 'foo\n');

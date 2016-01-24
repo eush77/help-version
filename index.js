@@ -3,7 +3,8 @@
 var getVersion = require('./lib/get-version'),
     findOption = require('./lib/find-option');
 
-var callsites = require('callsites');
+var callsites = require('callsites'),
+    once = require('once');
 
 
 // Add newline if necessary.
@@ -36,7 +37,7 @@ module.exports = function (helpText, opts) {
   opts = opts || {};
 
   var getHelp = typeof helpText == 'function'
-        ? helpText
+        ? once(helpText)
         : function () { return helpText };
 
   // Copy to a separate object to accomodate for passing `process` object with
