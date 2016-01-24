@@ -9,8 +9,8 @@ Anything you wanted to do with `--help` and `--version`:
 - checks these arguments in `process.argv`, so you don't have to;
 - extracts `version` from your `package.json` file;
 - returns functions that give you both `--help` and `--version`, in case you need to handle them differently;
-- returns the function that prints `--help` and exits with the given1 code;
-- highly configurable: you can set `process.argv`, `stdout` and `stderr` streams, and even `process.exit` function — you can use it for testing.
+- returns the function that prints `--help` and exits with the given code;
+- highly configurable: you can set `process.argv`, `stdout` and `stderr` streams, and even `process.exit` function — this means testing won't be a problem.
 
 [travis]: https://travis-ci.org/eush77/help-version
 [travis-badge]: https://travis-ci.org/eush77/help-version.svg
@@ -23,7 +23,6 @@ Anything you wanted to do with `--help` and `--version`:
 #!/usr/bin/env node
 
 var Cli = require('help-version');
-
 
 var cli = Cli('Usage:  my-cat [file]');
 
