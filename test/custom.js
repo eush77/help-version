@@ -9,9 +9,9 @@ var test = require('tape'),
 var path = require('path');
 
 
-var output = {
-  noNewline: getOutput.bind(null, path.join(__dirname, 'custom/no_newline.js')),
-  newline: getOutput.bind(null, path.join(__dirname, 'custom/newline.js'))
+var output = function (name) {
+  name = path.resolve(__dirname, 'custom', name + '.js');
+  return getOutput.apply(this, [name].concat([].slice.call(arguments, 1)));
 };
 
 
@@ -27,7 +27,7 @@ var compareHelpVersion = function (t, helpVersion, expectedHelpVersion) {
 test('help, no newline', function (t) {
   t.equal(getHelpVersion('no newline').help(), 'no newline');
 
-  output.noNewline(['--help'], function (output) {
+  output('no_newline', ['--help'], function (output) {
     t.equal(output, 'no newline\n');
     t.end();
   });
@@ -37,7 +37,7 @@ test('help, no newline', function (t) {
 test('help, with newline', function (t) {
   t.equal(getHelpVersion('newline\n', 'newline\n').help(), 'newline\n');
 
-  output.newline(['--help'], function (output) {
+  output('newline', ['--help'], function (output) {
     t.equal(output, 'newline\n');
     t.end();
   });
