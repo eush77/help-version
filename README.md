@@ -54,7 +54,7 @@ contents of file.txt
 
 ### `cli = Cli(helpText, [opts])`
 
-- `helpText` {String} — help text to print on `--help`.
+- `helpText` {String | Function} — help text to print on `--help`, or function to produce it.
 
 Checks `opts.argv` for `--help` or `--version`.
 

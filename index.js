@@ -17,6 +17,9 @@ var write = function (data, stream) {
 
 var maybeExit = function (data) {
   return function (code, stream) {
+    if (typeof data == 'function') {
+      data = data();
+    }
     if (code == null) {
       return data;
     }
@@ -29,8 +32,12 @@ var maybeExit = function (data) {
 };
 
 
-module.exports = function (help, opts) {
+module.exports = function (helpText, opts) {
   opts = opts || {};
+
+  var getHelp = typeof helpText == 'function'
+        ? helpText
+        : function () { return helpText };
 
   // Copy to a separate object to accomodate for passing `process` object with
   // getters.
@@ -46,7 +53,7 @@ module.exports = function (help, opts) {
 
   switch (findOption(options.argv, ['--help', '--version'])) {
     case '--help':
-      write.call(options, help);
+      write.call(options, getHelp());
       options.exit();
       break;
 
@@ -57,7 +64,7 @@ module.exports = function (help, opts) {
   }
 
   return {
-    help: maybeExit.call(options, help),
+    help: maybeExit.call(options, getHelp),
     version: maybeExit.call(options, version)
   };
 };

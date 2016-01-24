@@ -44,6 +44,16 @@ test('help, with newline', function (t) {
 });
 
 
+test('help, as a function', function (t) {
+  t.equal(getHelpVersion(function () { return 'foo' }).help(), 'foo');
+
+  output('function', ['--help'], function (output) {
+    t.equal(output, 'foo\n');
+    t.end();
+  });
+});
+
+
 test('options', function (t) {
   var opts = {
     argv: ['there', 'is', 'some', '--help', 'in', 'argv'],
